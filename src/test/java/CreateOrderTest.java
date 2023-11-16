@@ -8,7 +8,7 @@ import models.*;
 import models.Error;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.DisplayName;
+import io.qameta.allure.junit4.DisplayName;
 
 
 import java.util.ArrayList;

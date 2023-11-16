@@ -5,8 +5,7 @@ import models.Error;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.DisplayName;
-
+import io.qameta.allure.junit4.DisplayName;
 import static helper.CreateUserRequestGenerator.*;
 import static org.apache.http.HttpStatus.*;
 import static org.junit.Assert.*;

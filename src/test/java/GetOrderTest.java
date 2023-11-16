@@ -3,12 +3,11 @@ import client.OrdersApiClient;
 import client.UserApiClient;
 import helper.CreateIngredientsGenerator;
 import helper.CreateUserRequestGenerator;
-import io.restassured.path.json.JsonPath;
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import models.*;
 import models.Error;
 import org.junit.Test;
-import org.junit.jupiter.api.DisplayName;
 
 import java.util.ArrayList;
 
