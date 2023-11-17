@@ -8,16 +8,11 @@ import io.restassured.response.Response;
 import models.*;
 import models.Error;
 import org.junit.Test;
-
-import java.util.ArrayList;
-
 import static junit.framework.TestCase.*;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.apache.http.HttpStatus.SC_UNAUTHORIZED;
 
 public class GetOrderTest {
-
-
     @Test
     @DisplayName("Получение заказов авторизованного пользователя")
     public void getOrdersOfClientWithAuthIsAvailable(){

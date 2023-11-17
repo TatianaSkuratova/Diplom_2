@@ -10,7 +10,6 @@ import static helper.CreateUserRequestGenerator.*;
 import static org.apache.http.HttpStatus.*;
 import static org.junit.Assert.*;
 
-
 public class CreateUserTest {
     CreateUserRequest createUserRequest;
     UserApiClient userApiClient;

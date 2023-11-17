@@ -1,5 +1,4 @@
 package models;
-
 public class LoginUserRequest {
     private String email;
     private String password;

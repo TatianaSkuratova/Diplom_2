@@ -9,7 +9,6 @@ import org.junit.Test;
 import io.qameta.allure.junit4.DisplayName;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.apache.http.HttpStatus.SC_UNAUTHORIZED;
-
 import static junit.framework.TestCase.*;
 
 public class UpdateUserTest {

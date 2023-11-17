@@ -1,5 +1,4 @@
 package helper;
-
 import models.CreateUserRequest;
 import net.datafaker.Faker;
 

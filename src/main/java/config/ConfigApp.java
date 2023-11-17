@@ -1,5 +1,4 @@
 package config;
-
 public class ConfigApp {
     public final static String BASE_URL = "https://stellarburgers.nomoreparties.site";
     public final static String REGISTER_URL = "/api/auth/register";

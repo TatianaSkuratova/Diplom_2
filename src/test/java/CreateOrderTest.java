@@ -9,10 +9,7 @@ import models.Error;
 import org.junit.Before;
 import org.junit.Test;
 import io.qameta.allure.junit4.DisplayName;
-
-
 import java.util.ArrayList;
-
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 import static org.apache.http.HttpStatus.SC_BAD_REQUEST;

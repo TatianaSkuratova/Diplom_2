@@ -5,7 +5,6 @@ import models.CreateUserRequest;
 import models.LoginUserRequest;
 
 import static config.ConfigApp.*;
-import static io.restassured.RestAssured.given;
 
 public class UserApiClient extends BaseApiClient {
     public Response createUser(CreateUserRequest createUserRequest) {

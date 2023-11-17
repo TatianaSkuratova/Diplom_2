@@ -4,7 +4,6 @@ import io.restassured.response.Response;
 import models.CreateOrderRequest;
 
 import static config.ConfigApp.*;
-
 public class OrdersApiClient extends BaseApiClient{
     public Response createOrder (CreateOrderRequest request, String bearerToken){
         return getPostSpec()

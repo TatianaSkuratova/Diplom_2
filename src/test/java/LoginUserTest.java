@@ -15,7 +15,6 @@ import static org.apache.http.HttpStatus.SC_UNAUTHORIZED;
 import static org.junit.Assert.*;
 
 public class LoginUserTest {
-
     CreateUserRequest createUserRequest;
     LoginUserRequest loginUserRequest;
     UserApiClient userApiClient;
