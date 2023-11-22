@@ -13,6 +13,7 @@ import io.qameta.allure.junit4.DisplayName;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.apache.http.HttpStatus.SC_UNAUTHORIZED;
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class LoginUserTest {
     CreateUserRequest createUserRequest;
@@ -30,10 +31,11 @@ public class LoginUserTest {
         userApiClient.createUser(createUserRequest);
         Response responseLoginUser = userApiClient.loginUser(LoginUserRequest.fromCreateUserRequest(createUserRequest));
         LoginUserResponse loginUserResponse = responseLoginUser.as(LoginUserResponse.class);
-        assertTrue(loginUserResponse.getSuccess());
-        assertEquals(createUserRequest.getEmail(),loginUserResponse.getUser().getEmail());
-        assertEquals(createUserRequest.getName(),loginUserResponse.getUser().getName());
-        assertEquals(SC_OK,responseLoginUser.statusCode());
+        assertAll(() -> assertTrue(loginUserResponse.getSuccess()),
+            () ->  assertEquals(createUserRequest.getEmail(),loginUserResponse.getUser().getEmail()),
+            () ->  assertEquals(createUserRequest.getName(),loginUserResponse.getUser().getName()),
+            () ->  assertEquals(SC_OK,responseLoginUser.statusCode())
+        );
     }
     @Test
     @DisplayName("Проверка недоступности авторизации пользователя с неверным логином")
@@ -45,9 +47,12 @@ public class LoginUserTest {
                 .withPassword(createUserRequest.getPassword()+ RandomStringUtils.randomAlphabetic(3)).build();
         Response errorResponse = userApiClient.loginUser(loginUserRequest);
         Error userError = errorResponse.as(Error.class);
-        assertFalse(userError.getSuccess());
-        assertEquals(userError.getMessage(), Error.MESSAGE_WRONG_CREDENTIALS);
-        assertEquals(SC_UNAUTHORIZED,errorResponse.statusCode());
+        assertAll(
+                () -> assertFalse(userError.getSuccess()),
+                () -> assertEquals(userError.getMessage(), Error.MESSAGE_WRONG_CREDENTIALS),
+                () -> assertEquals(SC_UNAUTHORIZED,errorResponse.statusCode())
+
+        );
     }
     @Test
     @DisplayName("Проверка недоступности авторизации пользователя с неверным емейлом")
@@ -59,9 +64,11 @@ public class LoginUserTest {
                 .withPassword(createUserRequest.getPassword()).build();
         Response errorResponse = userApiClient.loginUser(loginUserRequest);
         Error userError = errorResponse.as(Error.class);
-        assertFalse(userError.getSuccess());
-        assertEquals(userError.getMessage(), Error.MESSAGE_WRONG_CREDENTIALS);
-        assertEquals(SC_UNAUTHORIZED,errorResponse.statusCode());
+        assertAll(
+                () ->  assertFalse(userError.getSuccess()),
+                 () -> assertEquals(userError.getMessage(), Error.MESSAGE_WRONG_CREDENTIALS),
+        () -> assertEquals(SC_UNAUTHORIZED,errorResponse.statusCode())
+        );
     }
     @After
     public void cleanUp(){

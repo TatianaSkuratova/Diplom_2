@@ -2,9 +2,9 @@ package models;
 import lombok.Data;
 @Data
 public class CreateUserRequest {
-    String email;
-    String password;
-    String name;
+    private String email;
+    private String password;
+    private String name;
 
 
     public static class Builder{

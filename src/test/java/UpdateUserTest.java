@@ -10,6 +10,7 @@ import io.qameta.allure.junit4.DisplayName;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.apache.http.HttpStatus.SC_UNAUTHORIZED;
 import static junit.framework.TestCase.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class UpdateUserTest {
 
@@ -41,11 +42,11 @@ public class UpdateUserTest {
         //получаем данные обновленного пользователя
         Response getUserResponse = userApiClient.getUser(token);
         UpdateUserResponse getUser = getUserResponse.as(UpdateUserResponse.class);
-        //проверяем, что данные совпадают
-        assertEquals(updateUser.getUser(),getUser.getUser());
-        //проверяем успешность обновления
-        assertTrue(success);
-        assertEquals(SC_OK, getUserResponse.statusCode());
+        assertAll(
+                ()->   assertEquals(updateUser.getUser(),getUser.getUser()),
+                () -> assertTrue(success),
+                () -> assertEquals(SC_OK, getUserResponse.statusCode())
+        );
     }
     @Test
     @DisplayName("Проверка недоступности изменения данных пользоваля без токена авторизации")
@@ -60,9 +61,11 @@ public class UpdateUserTest {
         Error error = updateUserResponse.as(Error.class);
         //получаем флаг успешности обновления для удаления пользователя после тестового прогона
         success = error.getSuccess();
-        assertFalse(success);
-        assertEquals(SC_UNAUTHORIZED, updateUserResponse.statusCode());
-        assertEquals(Error.MESSAGE_AUTHORISED, error.getMessage());
+        assertAll(
+                ()->   assertFalse(success),
+                () -> assertEquals(SC_UNAUTHORIZED, updateUserResponse.statusCode()),
+                () -> assertEquals(Error.MESSAGE_AUTHORISED, error.getMessage())
+        );
     }
     @After
     public void cleanUp(){

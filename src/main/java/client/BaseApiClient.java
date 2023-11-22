@@ -1,5 +1,6 @@
 package client;
 
+import config.ConfigApp;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
@@ -12,7 +13,8 @@ public class BaseApiClient {
         return given()
                 .filter(new RequestLoggingFilter())
                 .filter(new ResponseLoggingFilter())
-                .contentType(ContentType.JSON);
+                .contentType(ContentType.JSON)
+                .baseUri(ConfigApp.BASE_URL);
     }
 
 }

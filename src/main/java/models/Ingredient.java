@@ -6,6 +6,6 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 public class Ingredient {
-    String _id;
-    String name;
+    private String _id;
+    private String name;
 }

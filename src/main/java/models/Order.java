@@ -8,8 +8,8 @@ import java.util.List;
 @Data
 @RequiredArgsConstructor
 public class Order {
-    String _id;
-    List<Ingredient> ingredients;
-    String status;
-    User owner;
+    private String _id;
+    private List<Ingredient> ingredients;
+    private String status;
+    private User owner;
 }

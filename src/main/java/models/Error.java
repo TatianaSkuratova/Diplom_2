@@ -10,6 +10,6 @@ public class Error {
     public final static String MESSAGE_EMPTY_INGREDIENTS = "Ingredient ids must be provided";
     public final static String MESSAGE_INCORRECT_INGREDIENTS = "One or more ids provided are incorrect";
 
-    Boolean success;
-    String message;
+    private Boolean success;
+    private String message;
 }

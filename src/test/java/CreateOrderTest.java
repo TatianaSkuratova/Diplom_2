@@ -3,6 +3,7 @@ import client.OrdersApiClient;
 import client.UserApiClient;
 import helper.CreateIngredientsGenerator;
 import helper.CreateUserRequestGenerator;
+import io.qameta.allure.Description;
 import io.restassured.response.Response;
 import models.*;
 import models.Error;
@@ -15,11 +16,13 @@ import static junit.framework.TestCase.assertTrue;
 import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
 
 public class CreateOrderTest {
 
-    IngredientsResponse ingredientsResponse;
-    OrdersApiClient ordersApiClient;
+    private IngredientsResponse ingredientsResponse;
+   private OrdersApiClient ordersApiClient;
     @Before
     public void setup(){
         IngredientsApiClients ingredientsApiClients = new IngredientsApiClients();
@@ -32,9 +35,12 @@ public class CreateOrderTest {
     public void createOrderWithoutAuthIsAvailable(){
         CreateOrderRequest createOrderRequest = CreateIngredientsGenerator.randomIngredients(ingredientsResponse.getData(), 6);
         Response response = ordersApiClient.createOrder(createOrderRequest, "");
-        assertEquals(SC_OK, response.statusCode());
-        assertTrue(response.body().jsonPath().get("success"));
-        assertTrue(response.body().jsonPath().get("order.number") instanceof Integer);
+        assertAll(
+                () ->  assertEquals(SC_OK, response.statusCode()),
+                () -> assertTrue(response.body().jsonPath().get("success")),
+                () -> assertTrue(response.body().jsonPath().get("order.number") instanceof Integer)
+
+        );
     }
     @Test
     @DisplayName("Создание заказа с авторизацией доступно")
@@ -57,15 +63,14 @@ public class CreateOrderTest {
             ingredients.add(ingredient.get_id());
         }
         userApiClient.deleteUser(token);
-        //проверяем имя пользователя
-        assertEquals(userRequest.getName(), createOrderResponse.getOrder().getOwner().getName());
-        //статус-код и успешность
-        assertEquals(SC_OK, createResponse.statusCode());
-        assertTrue(createOrderResponse.getSuccess());
-        assertEquals(createOrderResponse.getOrder().getStatus(), "done");
-        //проверяем, что список ингредиентов из ответа и из запроса совпадают
-        assertEquals(ingredients, createOrderRequest.getIngredients());
-        //удаляем временного пользователя
+        assertAll(
+                () -> assertEquals(userRequest.getName(), createOrderResponse.getOrder().getOwner().getName()),
+                () ->  assertEquals(SC_OK, createResponse.statusCode()),
+                () -> assertTrue(createOrderResponse.getSuccess()),
+                () -> assertEquals(createOrderResponse.getOrder().getStatus(), "done"),
+                () -> assertEquals(ingredients, createOrderRequest.getIngredients())
+        );
+
 
     }
     @Test
@@ -74,9 +79,11 @@ public class CreateOrderTest {
         CreateOrderRequest createOrderRequest = CreateIngredientsGenerator.emptyIngredients();
         Response response = ordersApiClient.createOrder(createOrderRequest, "");
         Error error = response.as(Error.class);
-        assertEquals(SC_BAD_REQUEST, response.statusCode());
-        assertFalse(error.getSuccess());
-        assertEquals(error.getMessage(), Error.MESSAGE_EMPTY_INGREDIENTS);
+        assertAll(
+                () -> assertEquals(SC_BAD_REQUEST, response.statusCode()),
+                () -> assertFalse(error.getSuccess()),
+                () -> assertEquals(error.getMessage(), Error.MESSAGE_EMPTY_INGREDIENTS)
+        );
     }
 
     @Test
@@ -85,9 +92,12 @@ public class CreateOrderTest {
         CreateOrderRequest createOrderRequest = CreateIngredientsGenerator.fakeIngredients();
         Response response = ordersApiClient.createOrder(createOrderRequest, "");
         Error error = response.as(Error.class);
-        assertEquals(SC_BAD_REQUEST, response.statusCode());
-        assertFalse(error.getSuccess());
-        assertEquals(error.getMessage(), Error.MESSAGE_INCORRECT_INGREDIENTS);
+        assertAll(
+                () -> assertEquals(SC_BAD_REQUEST, response.statusCode()),
+                () -> assertFalse(error.getSuccess()),
+                () -> assertEquals(error.getMessage(), Error.MESSAGE_INCORRECT_INGREDIENTS)
+        );
+
     }
 
 }

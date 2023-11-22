@@ -9,6 +9,9 @@ import io.qameta.allure.junit4.DisplayName;
 import static helper.CreateUserRequestGenerator.*;
 import static org.apache.http.HttpStatus.*;
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 
 public class CreateUserTest {
     CreateUserRequest createUserRequest;
@@ -33,10 +36,12 @@ public class CreateUserTest {
         createUserRequest = getRandomUser();
         Response createResponse =  userApiClient.createUser(createUserRequest);
         CreateUserResponse createUserResponse = createResponse.as(CreateUserResponse.class);
-        assertTrue(createUserResponse.getSuccess());
-        assertEquals(createUserRequest.getEmail(),createUserResponse.getUser().getEmail());
-        assertEquals(createUserRequest.getName(),createUserResponse.getUser().getName());
-        assertEquals(SC_OK,createResponse.statusCode());
+        assertAll(
+                () ->  assertTrue(createUserResponse.getSuccess()),
+                () -> assertEquals(createUserRequest.getEmail(),createUserResponse.getUser().getEmail()),
+                () -> assertEquals(createUserRequest.getName(),createUserResponse.getUser().getName()),
+                () -> assertEquals(SC_OK,createResponse.statusCode())
+        );
     }
     @Test
     @DisplayName("Создание пользователя, который уже зарегистрирован, недоступно")
@@ -45,9 +50,11 @@ public class CreateUserTest {
         userApiClient.createUser(createUserRequest);
         Response createDuplicateResponse = userApiClient.createUser(createUserRequest);
         Error errorMessageResponse = createDuplicateResponse.as(Error.class);
-        assertEquals(SC_FORBIDDEN,createDuplicateResponse.statusCode());
-        assertEquals(Error.MESSAGE_DUPLICATE_USER, errorMessageResponse.getMessage());
-        assertFalse(errorMessageResponse.getSuccess());
+        assertAll(
+                () -> assertEquals(SC_FORBIDDEN,createDuplicateResponse.statusCode()),
+                () -> assertEquals(Error.MESSAGE_DUPLICATE_USER, errorMessageResponse.getMessage()),
+                () -> assertFalse(errorMessageResponse.getSuccess())
+        );
     }
 
     @Test
@@ -56,9 +63,11 @@ public class CreateUserTest {
         createUserRequest = getRandomUserWithoutEmail();
         Response createResponse =  userApiClient.createUser(createUserRequest);
         Error errorMessageResponse = createResponse.as(Error.class);
-        assertEquals(SC_FORBIDDEN,createResponse.statusCode());
-        assertEquals(Error.MESSAGE_REQUIRED_FIELDS, errorMessageResponse.getMessage());
-        assertFalse(errorMessageResponse.getSuccess());
+        assertAll(
+                () -> assertEquals(SC_FORBIDDEN,createResponse.statusCode()),
+                () -> assertEquals(Error.MESSAGE_REQUIRED_FIELDS, errorMessageResponse.getMessage()),
+                () -> assertFalse(errorMessageResponse.getSuccess())
+        );
     }
     @Test
     @DisplayName("Создание пользователя без пароля недоступно")
@@ -66,9 +75,12 @@ public class CreateUserTest {
         createUserRequest = getRandomUserWithoutPassword();
         Response createResponse =  userApiClient.createUser(createUserRequest);
         Error errorMessageResponse = createResponse.as(Error.class);
-        assertEquals(SC_FORBIDDEN,createResponse.statusCode());
-        assertEquals(Error.MESSAGE_REQUIRED_FIELDS, errorMessageResponse.getMessage());
-        assertFalse(errorMessageResponse.getSuccess());
+        assertAll(
+                () -> assertEquals(SC_FORBIDDEN,createResponse.statusCode()),
+                () -> assertEquals(Error.MESSAGE_REQUIRED_FIELDS, errorMessageResponse.getMessage()),
+                () ->  assertFalse(errorMessageResponse.getSuccess())
+        );
+
     }
     @Test
     @DisplayName("Создание пользователя без имени доступно")
@@ -77,9 +89,11 @@ public class CreateUserTest {
         createUserRequest = getRandomUserWithoutPassword();
         Response createResponse =  userApiClient.createUser(createUserRequest);
         Error errorMessageResponse = createResponse.as(Error.class);
-        assertEquals(SC_FORBIDDEN,createResponse.statusCode());
-        assertEquals(Error.MESSAGE_REQUIRED_FIELDS, errorMessageResponse.getMessage());
-        assertFalse(errorMessageResponse.getSuccess());
+        assertAll(
+                () -> assertEquals(SC_FORBIDDEN,createResponse.statusCode()),
+                () -> assertEquals(Error.MESSAGE_REQUIRED_FIELDS, errorMessageResponse.getMessage()),
+                () -> assertFalse(errorMessageResponse.getSuccess())
+        );
     }
 
 }

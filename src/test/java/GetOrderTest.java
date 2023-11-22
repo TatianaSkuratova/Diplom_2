@@ -11,6 +11,7 @@ import org.junit.Test;
 import static junit.framework.TestCase.*;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.apache.http.HttpStatus.SC_UNAUTHORIZED;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class GetOrderTest {
     @Test
@@ -38,9 +39,12 @@ public class GetOrderTest {
         //получаем id вернувшегося заказа
         String idOrderResponse = getOrderResponse.body().jsonPath().get("orders[0]._id");
         //проверяем, что id вернувшегося заказа равно id созданного
-        assertEquals(idCreatedResponse, idOrderResponse);
-        assertEquals(SC_OK, getOrderResponse.statusCode());
-        assertTrue(getOrderResponse.body().jsonPath().get("success"));
+
+        assertAll(
+                () -> assertEquals(idCreatedResponse, idOrderResponse),
+                () -> assertEquals(SC_OK, getOrderResponse.statusCode()),
+                () -> assertTrue(getOrderResponse.body().jsonPath().get("success"))
+        );
         userApiClient.deleteUser(token);
     }
     @Test
@@ -52,8 +56,11 @@ public class GetOrderTest {
         //получаем id вернувшегося заказа
         Error error = getOrderResponse.as(Error.class);
         //проверяем, что id вернувшегося заказа равно id созданного
-        assertEquals(error.getMessage(), Error.MESSAGE_AUTHORISED);
-        assertEquals(SC_UNAUTHORIZED, getOrderResponse.statusCode());
-        assertFalse(error.getSuccess());
+        assertAll(
+                () -> assertEquals(error.getMessage(), Error.MESSAGE_AUTHORISED),
+                () -> assertEquals(SC_UNAUTHORIZED, getOrderResponse.statusCode()),
+                () -> assertFalse(error.getSuccess())
+        );
+
     }
 }

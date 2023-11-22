@@ -1,4 +1,5 @@
 package helper;
+import io.qameta.allure.Step;
 import models.CreateOrderRequest;
 import models.Ingredient;
 
@@ -7,6 +8,7 @@ import java.util.Random;
 
 public class CreateIngredientsGenerator {
 
+    @Step("Создать случайный список ингредиентов")
     public static CreateOrderRequest randomIngredients(ArrayList<Ingredient> listIngredients, int countOfIngredients){
         ArrayList<String> idIngredients = new ArrayList<>();
         ArrayList<String> buns = new ArrayList<>();
@@ -27,10 +29,12 @@ public class CreateIngredientsGenerator {
         }
         return new CreateOrderRequest(idIngredients);
     };
+    @Step("Создать пустой список ингредиентов")
     public static CreateOrderRequest emptyIngredients(){
         ArrayList<String> idIngredients = new ArrayList<>();
         return new CreateOrderRequest(idIngredients);
     };
+    @Step("Создать список невалидных ингредиентов")
     public static CreateOrderRequest fakeIngredients(){
         ArrayList<String> idIngredients = new ArrayList<>();
         idIngredients.add("61c0c5a71d1f82001bdaaa00");
